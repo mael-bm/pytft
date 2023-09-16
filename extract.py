@@ -10,7 +10,9 @@ LOSE_COLOR = (15, 59, 70)
 STAGE_COORDS = (770, 12, 860, 33)
 
 class Tesseract:
-    pytesseract.pytesseract.tesseract_cmd = r"C:\Users\Romain\Documents\GitHub\pytft\tesseract\tesseract.exe"
+    # C:\Users\maelb\Documents\GitHub\pytft\tesseract\tesseract.exe
+    # C:\Users\Romain\Documents\GitHub\pytft\tesseract\tesseract.exe
+    pytesseract.pytesseract.tesseract_cmd = r"C:\Users\maelb\Documents\GitHub\pytft\tesseract\tesseract.exe"
 
     @staticmethod
     def to_gray(d):
@@ -36,7 +38,7 @@ class Tesseract:
 
     @staticmethod
     def image_to_string(data):
-        result = pytesseract.image_to_string(data, config = r"--oem 3 --psm 7 -c tessedit_char_whitelist=0123456789-")
+        result = pytesseract.image_to_string(data, config = r"--oem 3 --psm 7 -c tessedit_char_whitelist=0123456789-abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
         return result
 
     @staticmethod
@@ -81,5 +83,5 @@ class Tesseract:
         stage = Tesseract.image_to_string(im)
         return stage
 
-u = Tesseract.stage_value()
+u = Tesseract.get_shop()
 print(u)
