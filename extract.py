@@ -4,7 +4,7 @@ import cv2
 import numpy as np
 
 SHOP_COORDS = (480, 1040, 1480, 1070)
-GOLD_COORDS = (868, 885, 910, 905)
+GOLD_COORDS = (868, 885, 910, 910)
 
 
 class Tesseract:
@@ -34,7 +34,7 @@ class Tesseract:
 
     @staticmethod
     def image_to_string(data):
-        result = pytesseract.image_to_string(data)
+        result = pytesseract.image_to_string(data, config = r"--oem 3 --psm 7 -c tessedit_char_whitelist=0123456789")
         return result
 
     @staticmethod
@@ -55,11 +55,10 @@ class Tesseract:
     @staticmethod
     def gold_balance():
         im = ImageGrab.grab(bbox=GOLD_COORDS)
-        # im = Tesseract.clean(im)
+        im = Tesseract.to_gray(im)
         im.save("gold.png")
-        print("haha")
-        gold_count = Tesseract.image_to_string(im, digits=True)
-        print('heho')
+        gold_count = Tesseract.image_to_string(im)
+        return gold_count
 
-u = Tesseract.get_shop()
+u = Tesseract.gold_balance()
 print(u)
