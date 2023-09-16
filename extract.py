@@ -5,7 +5,8 @@ import numpy as np
 
 SHOP_COORDS = (480, 1040, 1480, 1070)
 GOLD_COORDS = (868, 885, 910, 910)
-
+STREAK_COORDS = (984, 876, 1025, 908)
+LOSE_COLOR = (15, 59, 70)
 
 class Tesseract:
     pytesseract.pytesseract.tesseract_cmd = r"C:\Users\Romain\Documents\GitHub\pytft\tesseract\tesseract.exe"
@@ -56,9 +57,20 @@ class Tesseract:
     def gold_balance():
         im = ImageGrab.grab(bbox=GOLD_COORDS)
         im = Tesseract.to_gray(im)
-        im.save("gold.png")
         gold_count = Tesseract.image_to_string(im)
         return gold_count
 
-u = Tesseract.gold_balance()
+    @staticmethod
+    def streak_value():
+        im = ImageGrab.grab(bbox=STREAK_COORDS)
+        im.save("streak.png")
+        color = im.getpixel((2, 23))
+        side = (-1 if color[2] > 17 else 1)  # check if blue channel of rgb is higher 17, if so its lose streak
+        try:
+            val = int(Tesseract.image_to_string(im))
+        except ValueError:
+            val = 0
+        return val*side
+
+u = Tesseract.streak_value()
 print(u)
