@@ -7,6 +7,7 @@ SHOP_COORDS = (480, 1040, 1480, 1070)
 GOLD_COORDS = (868, 885, 910, 910)
 STREAK_COORDS = (984, 876, 1025, 908)
 LOSE_COLOR = (15, 59, 70)
+STAGE_COORDS = (770, 12, 860, 33)
 
 class Tesseract:
     pytesseract.pytesseract.tesseract_cmd = r"C:\Users\Romain\Documents\GitHub\pytft\tesseract\tesseract.exe"
@@ -35,7 +36,7 @@ class Tesseract:
 
     @staticmethod
     def image_to_string(data):
-        result = pytesseract.image_to_string(data, config = r"--oem 3 --psm 7 -c tessedit_char_whitelist=0123456789")
+        result = pytesseract.image_to_string(data, config = r"--oem 3 --psm 7 -c tessedit_char_whitelist=0123456789-")
         return result
 
     @staticmethod
@@ -72,5 +73,13 @@ class Tesseract:
             val = 0
         return val*side
 
-u = Tesseract.streak_value()
+    @staticmethod
+    def stage_value():
+        im = ImageGrab.grab(bbox=STAGE_COORDS)
+        im = Tesseract.to_gray(im)
+        im.save("stage.png")
+        stage = Tesseract.image_to_string(im)
+        return stage
+
+u = Tesseract.stage_value()
 print(u)
