@@ -10,9 +10,7 @@ LOSE_COLOR = (15, 59, 70)
 STAGE_COORDS = (770, 12, 860, 33)
 
 class Tesseract:
-    # C:\Users\maelb\Documents\GitHub\pytft\tesseract\tesseract.exe
-    # C:\Users\Romain\Documents\GitHub\pytft\tesseract\tesseract.exe
-    pytesseract.pytesseract.tesseract_cmd = r"C:\Users\maelb\Documents\GitHub\pytft\tesseract\tesseract.exe"
+    pytesseract.pytesseract.tesseract_cmd = "tesseract"
 
     @staticmethod
     def to_gray(d):
