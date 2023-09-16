@@ -109,5 +109,26 @@ class Tesseract:
         stage = Tesseract.image_to_string(im)
         return stage
 
-u = Tesseract.get_shop()
-print(u)
+from PIL import ImageDraw
+
+class DebuggingTools:
+    @staticmethod
+    def draw_rectangles(areas, dpi_ratio):
+        im = ImageGrab.grab()
+        draw = ImageDraw.Draw(im)
+        for c in areas :
+            (a,b,c,d) = c
+            draw.rectangle((a*dpi_ratio, b*dpi_ratio, c*dpi_ratio, d*dpi_ratio), fill="#ff0000")
+        im.show()
+
+# DebuggingTools.draw_rectangles([
+#     SHOP_COORDS,
+#     GOLD_COORDS,
+#     STREAK_COORDS,
+#     STAGE_COORDS
+# ], DPI_RATIO)
+
+print(Tesseract.get_shop())
+print(Tesseract.gold_balance())
+print(Tesseract.streak_value())
+print(Tesseract.stage_value())
