@@ -3,11 +3,39 @@ import pytesseract
 import cv2
 import numpy as np
 
-SHOP_COORDS = (480, 1040, 1480, 1070)
-GOLD_COORDS = (868, 885, 910, 910)
-STREAK_COORDS = (984, 876, 1025, 908)
+# A module to correct coordinates expressed in reference resolution (typically: 1920x108)
+# into a different resolution
+class CoordinatesMapper:
+    @staticmethod
+    def compute_screen_resolution():
+        return ImageGrab.grab().size
+
+    @staticmethod    
+    def adapt_coords(source, ref_resolution, current_resolution, dpi_ratio):
+        (w,h) = ref_resolution
+        (wc, hc) = current_resolution
+
+        x1 = int(source[0] * (wc/w) / dpi_ratio)
+        y1 = int(source[1] * (hc/h) / dpi_ratio)
+        x2 = int(source[2] * (wc/w) / dpi_ratio)
+        y2 = int(source[3] * (hc/h) / dpi_ratio)
+
+        data = (x1, y1, x2, y2)
+        return data
+
+CURRENT_RESOLUTION = CoordinatesMapper.compute_screen_resolution()
+REFERENCE_RESOLUTION = (1920, 1080)
+
+# Hypothesis: ImageGrab.grab() without parameters return image size, but ignoring DPI
+# then ImageGrab.grab(bbox=) with same coordinates will not capture the whole screen, must be adjusted
+DPI_RATIO = 2.0
+
+SHOP_COORDS = CoordinatesMapper.adapt_coords((480, 1040, 1480, 1070), REFERENCE_RESOLUTION, CURRENT_RESOLUTION, DPI_RATIO)
+GOLD_COORDS = CoordinatesMapper.adapt_coords((868, 885, 910, 910), REFERENCE_RESOLUTION, CURRENT_RESOLUTION, DPI_RATIO)
+STREAK_COORDS = CoordinatesMapper.adapt_coords((984, 876, 1025, 908), REFERENCE_RESOLUTION, CURRENT_RESOLUTION, DPI_RATIO)
+STAGE_COORDS = CoordinatesMapper.adapt_coords((770, 12, 860, 33), REFERENCE_RESOLUTION, CURRENT_RESOLUTION, DPI_RATIO)
+
 LOSE_COLOR = (15, 59, 70)
-STAGE_COORDS = (770, 12, 860, 33)
 
 class Tesseract:
     pytesseract.pytesseract.tesseract_cmd = "tesseract"
