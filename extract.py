@@ -3,6 +3,8 @@ import pytesseract
 import cv2
 import numpy as np
 
+from plateau import get_coords
+
 # A module to correct coordinates expressed in reference resolution (typically: 1920x108)
 # into a different resolution
 class CoordinatesMapper:
@@ -128,7 +130,21 @@ class DebuggingTools:
 #     STAGE_COORDS
 # ], DPI_RATIO)
 
-print(Tesseract.get_shop())
-print(Tesseract.gold_balance())
-print(Tesseract.streak_value())
-print(Tesseract.stage_value())
+# print(Tesseract.get_shop())
+# print(Tesseract.gold_balance())
+# print(Tesseract.streak_value())
+# print(Tesseract.stage_value())
+
+(a,b) = CURRENT_RESOLUTION
+
+im = ImageGrab.grab()
+ray = 10
+im = im.resize((1920, 1080))
+draw = ImageDraw.Draw(im)
+for i in range(1, 7+1):
+    for j in range(1, 4+1):
+        (x,y) = get_coords(i, j)
+        draw.ellipse([(x-ray),(y-ray),(x+ray),(y+ray)], fill="#0000FF")
+
+im = im.resize((int(a/3), int(b/3)))
+im.show()
