@@ -8,7 +8,7 @@ GOLD_COORDS = (868, 885, 910, 905)
 
 
 class Tesseract:
-    pytesseract.pytesseract.tesseract_cmd = r"D:\pytft\tesseract\tesseract.exe"
+    pytesseract.pytesseract.tesseract_cmd = r"C:\Users\Romain\Documents\GitHub\pytft\tesseract\tesseract.exe"
 
     @staticmethod
     def to_gray(d):
@@ -33,9 +33,8 @@ class Tesseract:
         return Image.fromarray(cv2.cvtColor(invert, cv2.COLOR_BGR2RGB))
 
     @staticmethod
-    def image_to_string(data, digits=False):
-        print(data.show())
-        result = pytesseract.image_to_string(data, config="digits" if digits else None)
+    def image_to_string(data):
+        result = pytesseract.image_to_string(data)
         return result
 
     @staticmethod
@@ -47,10 +46,10 @@ class Tesseract:
         units = []
         for x in range(0, 5):
             box = (x * unit_length, 0, (x + 1) * unit_length - 50, im.size[1])
-            print(box)
+            #print(box)
             new = im.crop(box)
-            new.save(f"{x}.png")
-            units.append(Tesseract.image_to_string(new))
+            text = Tesseract.image_to_string(new).replace("\n","")
+            units.append(text)
         return units
 
     @staticmethod
@@ -62,4 +61,5 @@ class Tesseract:
         gold_count = Tesseract.image_to_string(im, digits=True)
         print('heho')
 
-Tesseract.gold_balance()
+u = Tesseract.get_shop()
+print(u)
